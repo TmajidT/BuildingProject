@@ -177,4 +177,39 @@ public class Write_To_Sql {
 
     }
 
+
+    public static void update_mohlate_sokoonat(int vahed_id,String date){
+
+        String query = "UPDATE vahedha SET mohlate_sokoonate_vahed='" + date + "' WHERE vahed_id=" + vahed_id;
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/building","root","testpass");
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(query);
+
+            System.out.println("\namaliat ba movafaghiat anjam shod!!!");
+
+            statement.close();
+            connection.close();
+        }catch (Exception e){
+            System.out.println("\nERROR :" + e);
+        }
+
+    }
+
+    public static void update_password(int role,String password){
+        String query = "UPDATE info SET user_password='" + password + "' WHERE user_number=" + role;
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/building","root","testpass");
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(query);
+
+            System.out.println("\namaliat ba movafaghiat anjam shod!!!");
+
+            statement.close();
+            connection.close();
+        }catch (Exception e){
+            System.out.println("\nERROR :" + e);
+        }
+    }
+
 }

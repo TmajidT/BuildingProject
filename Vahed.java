@@ -92,7 +92,6 @@ public class Vahed{                             //baraye sakhte moshkhasate har 
     }
 
 
-
     public void getString() {
         System.out.printf("id vahed: %d\n",getVahed_id());
         System.out.printf("ekhtar: %s\n",getWarning());

@@ -135,4 +135,74 @@ public class Update_info {
 
         Write_To_Sql.add_payment_history(vahed_id,choice,debt,last_payment);            //afzoodane tarikhche'ye pardakht
     }
+
+    public static void update_mohlate_sokoonat(){
+        System.out.println("----------shoma dar hale be rooz resanie mohlate sokoonate vahed hastid----------");
+        Scanner input = new Scanner(System.in);
+        int vahed_id;
+        do {
+            System.out.println("ID vahedi ke ghablan sabt shode ra vared konid:  ");
+            vahed_id = input.nextInt();
+        }while (!(Check_data.vahed_id_check(vahed_id)));
+
+        boolean condition;
+        System.out.println("ba deghat va kamel tarikhe jadid ra vared konid.");
+        String new_mohlat;
+        int sal;
+        do {
+            condition = false;
+            System.out.print("sal:  ");
+            sal = input.nextInt();
+            if ((sal>1405)||(sal<1401)){
+                System.out.println("lotfan adad ra ba deghat vared konid!!!");
+                condition = true;
+            }
+        } while (condition);
+
+        int mah;
+        do {
+            condition = false;
+            System.out.print("mah:  ");
+            mah = input.nextInt();
+            if ((mah>12)||(mah<1)){
+                System.out.println("lotfan adad ra ba deghat vared konid!!!");
+                condition = true;
+            }
+        } while (condition);
+
+        int rooz;
+        do {
+            condition = false;
+            System.out.print("rooz:  ");
+            rooz = input.nextInt();
+            if ((rooz>31)||(rooz<1)){
+                System.out.println("lotfan adad ra ba deghat vared konid!!!");
+                condition = true;
+            }
+        } while (condition);
+        new_mohlat = String.format("%d-%d-%d", sal, mah, rooz);
+
+        Write_To_Sql.update_mohlate_sokoonat(vahed_id,new_mohlat);
+    }
+
+    public static void update_password(int role){
+        System.out.println("\n---------------------------shoma dar hale be rooz resanie ramze oboor hastid---------------------------");
+        Scanner input = new Scanner(System.in);
+        String password;
+        String password_v;
+        boolean condition = true;
+        do {
+            condition = true;
+            System.out.print("ramze obor jadid ra vared konid:   ");
+            password = input.nextLine();
+            System.out.print("baraye taid kardan ramz ra dobare vared konid:  ");
+            password_v = input.nextLine();
+            if (!Objects.equals(password, password_v)){
+                System.out.println("ramze oboorha yeksan nistand!!! dobare talash konid");
+                condition = false;
+            }
+        }while (!condition);
+
+        Write_To_Sql.update_password(role,password);
+    }
 }

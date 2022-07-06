@@ -2,8 +2,77 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Scanner;
 
 public class Get_data {
+
+    public static void main_loop(){
+        System.out.println("------------------------------------");
+        Scanner input = new Scanner(System.in);
+        int choice;
+        boolean condition = true;
+        do {
+            System.out.println("-------------------------------");
+            System.out.println("daryafte etela'ate:");
+            System.out.println("vahed: 1");
+            System.out.println("saken: 2");
+            System.out.println("bar asase vaziate vahed: 3");
+            System.out.println("bedehi'haye vahed: 4");
+            System.out.println("tarikhcheye pardakhti'ha: 5");
+            System.out.println("tarikhe saken shodan ya mohlate sokoonat: 6");
+            System.out.println("khoroj: 0");
+            System.out.println("-------------------------------");
+
+            do {
+                condition = true;
+                System.out.print("entekhabe shoma:");
+                choice = input.nextInt();
+                if (choice==0){
+                    break;
+                }
+                else if ((choice<1)||(choice>6)){
+                    System.out.println("lotfan addad ra ba deghat vared konid!!");
+                    condition = false;
+                }
+            }while (!condition);
+
+
+            switch (choice){
+                case 1:{
+                    Admin_access.get_vahed_info_id();
+                    break;
+                }
+                case 2: {
+                    Admin_access.get_saken_info();
+                    break;
+                }
+                case 3: {
+                    Admin_access.get_vahed_info_vaziat();
+                    break;
+                }
+                case 4: {
+                    Admin_access.get_payment_info();
+                    break;
+                }
+                case 5: {
+                    Admin_access.get_payment_history_info();
+                    break;
+                }
+                case 6:{
+                    Admin_access.get_vahed_date();
+                    break;
+                }
+                case 0: {
+                    condition = false;
+                    break;
+                }
+            }
+
+
+        }while (condition);
+
+    }
+
     public static void get_sakenan_row(int code_meli){
 
         String query = "SELECT * FROM sakenan WHERE code_meli='" + code_meli + "'";
@@ -41,11 +110,13 @@ public class Get_data {
         }
     }
 
+    public static void get_vahed_row(int vahed_id,String vaziat){           //agar [ vahed_id == -1 ] yani search bar asase vaziate vahed ast(ejare ya khali ya mostajer)
+        String query = "";
+        if (vahed_id!=-1)
+            query = "SELECT * FROM vahedha WHERE vahed_id='" + vahed_id + "'";
+        else
+            query = "SELECT * FROM vahedha WHERE vaziate_vahed='" + vaziat + "'";
 
-
-    public static void get_vahed_row(int vahed_id){
-
-        String query = "SELECT * FROM vahedha WHERE vahed_id='" + vahed_id + "'";
         try {
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/building","root","testpass");
             Statement statement = connection.createStatement();
@@ -53,6 +124,7 @@ public class Get_data {
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
+                vahed_id = Integer.parseInt(resultSet.getString(1));
                 String warning = resultSet.getString(2);
                 int tabaghe_vahed = Integer.parseInt(resultSet.getString(3));
                 String vaziate_vahed = resultSet.getString(4);
@@ -85,7 +157,6 @@ public class Get_data {
 
 
     }
-
 
     public static void get_payment_row(int vahed_id){
 
@@ -124,9 +195,7 @@ public class Get_data {
         }
     }
 
-
-
-public static void get_payment_history_info(int vahed_id){
+    public static void get_payment_history_info(int vahed_id){
 
     String query = "SELECT * FROM vahed_payment_history WHERE vahed_id='" + vahed_id + "'";
     try {
@@ -169,4 +238,39 @@ public static void get_payment_history_info(int vahed_id){
 
 
     }
+
+    public static void get_vahed_date(int choice,String date){
+        String query = "";
+        if (choice==2)
+            query = "SELECT * FROM vahedha WHERE mohlate_sokoonate_vahed='" + date + "'";
+        else
+            query = "SELECT * FROM vahedha WHERE tarikhe_saken_shodan='" + date + "'";
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/building","root","testpass");
+            Statement statement = connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery(query);
+            System.out.println();
+            boolean is_available = false;
+            while (resultSet.next()) {
+                is_available = true;
+                System.out.println("----------------------------etela'ate vahed----------------------------");
+                int vahed_id = Integer.parseInt((resultSet.getString(1)));
+                String mohlate_sokoonate_vahed = resultSet.getString(8);
+                String tarikhe_saken_shodan = resultSet.getString(9);
+                System.out.println("ID vahed : " + vahed_id);
+                System.out.println("tarikhe saken shodan : " + tarikhe_saken_shodan);
+                System.out.println("mohlate takhlie: " + mohlate_sokoonate_vahed);
+                System.out.println("---------------------");
+            }
+            if (!(is_available))
+                System.out.println("vahedi baraye tarikhe movrede nazar vojod nadarad!!!\n");
+            System.out.println("----------------------------------------------------------------------");
+            statement.close();
+            connection.close();
+        }catch (Exception e){
+            System.out.println("\nERROR :" + e);
+        }
+    }
+
 }

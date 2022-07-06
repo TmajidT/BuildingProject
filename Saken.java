@@ -29,14 +29,13 @@ public class Saken {
         return code_meli;
     }
 
-
     public static void setFirst_name(String first_name) {
         Saken.first_name = first_name;
     }
+
     public static String getFirst_name() {
         return first_name;
     }
-
 
     public static void setLast_name(String last_name) {
         Saken.last_name = last_name;
@@ -53,7 +52,6 @@ public class Saken {
         return is_landlord;
     }
 
-
     public static void setRequest(String request) {
         Saken.request = request;
     }
@@ -61,18 +59,18 @@ public class Saken {
         return request;
     }
 
-
     public static void setVahed_id(int vahed_id) {
         Saken.vahed_id = vahed_id;
     }
+
     public static int getVahed_id() {
         return vahed_id;
     }
 
-
     public static void setLast_update(String last_update) {
         Saken.last_update = last_update;
     }
+
     public static String getLast_update() {
         return last_update;
     }
